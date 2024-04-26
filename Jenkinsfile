@@ -41,8 +41,7 @@ pipeline {
         stage('Image Vulnerability Scan') {
             steps {
                 script {
-                    sh """trivy image --format template --template "@/usr/bin/html.tpl" --output trivy_report.html ${registryUrl}:${BUILD_NUMBER}"""
-                    
+                    sh """trivy image --format template --template "@/usr/bin/html.tpl" --output trivy_report.html ${registryUrl}:${BUILD_NUMBER}""" 
                 }
             }
         }
