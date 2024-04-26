@@ -56,6 +56,16 @@ pipeline {
             }
         }
 
+        stage('Deploy to Amazon ECS Cluster'){
+        steps {
+            withAWS(region: 'us-east-1',credentials: 'jenkins-aws') {
+                script {
+                   sh 'aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment'
+                }
+            }
+        }
+     }
+
     }
     post {
         always {
