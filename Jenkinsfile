@@ -10,13 +10,13 @@ pipeline {
 
     stages {
 
-        stage('Install') {
+        stage('Initialize') {
             steps {
                 sh 'npm install'
             }
         }
 
-        stage('Unit Tests') {
+        stage('Unit Testing') {
             steps {
                 sh 'npm test'
             }
@@ -28,7 +28,7 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build Image') {
             steps {
                 script {
                    dockerImage = docker.build registryUrl + ":$BUILD_NUMBER"
@@ -36,17 +36,16 @@ pipeline {
             }
         }
 
-        stage('Trivy Scan') {
+        stage('Image Vulnerability Scan') {
             steps {
                 script {
                     sh """trivy image --format template --template \"~/home/templates/html.tpl\" --output trivy_report.html ${registryUrl}:${BUILD_NUMBER}"""
                     
                 }
-                
             }
         }
 
-        stage('Push to Dockerhub') {
+        stage('Push to Dockerhub Registry') {
             steps {
                 script {
                     docker.withRegistry( '', registryCredential ) {
@@ -58,4 +57,17 @@ pipeline {
         }
 
     }
+    post {
+        always {
+            archiveArtifacts artifacts: "trivy_report.html", fingerprint: true
+            publishHTML (target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: false,
+                keepAll: true,
+                reportDir: '.',
+                reportFiles: 'trivy_report.html',
+                reportName: 'Trivy Scan',
+                ])
+            }
+        }
 }
