@@ -36,6 +36,16 @@ pipeline {
             }
         }
 
+        stage('Trivy Scan') {
+            steps {
+                script {
+                    sh """trivy image --format template --template \"~/home/templates/html.tpl\" --output trivy_report.html ${registryUrl}:${BUILD_NUMBER}"""
+                    
+                }
+                
+            }
+        }
+
         stage('Push to Dockerhub') {
             steps {
                 script {
@@ -46,6 +56,6 @@ pipeline {
                 }
             }
         }
-        
+
     }
 }
