@@ -39,7 +39,7 @@ pipeline {
         stage('Image Vulnerability Scan') {
             steps {
                 script {
-                    sh """trivy image --format template --template "@contrib/html.tpl" --output trivy_report.html ${registryUrl}:${BUILD_NUMBER}"""
+                    sh """trivy image --format template --template "@/home/azureuser/contrib/html.tpl" --output trivy_report.html ${registryUrl}:${BUILD_NUMBER}"""
                     
                 }
             }
