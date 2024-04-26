@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        nodejs 'nodejs'
+        NodeJS 'node'
     }
     stages {
         stage('Install') {
@@ -15,5 +15,4 @@ pipeline {
             }
         }
     }
-
 }
