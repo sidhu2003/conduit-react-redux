@@ -6,6 +6,8 @@ pipeline {
         registryUrl = 'programmer175/react-app'
         registryCredential = 'programmer175'
         dockerImage = ''
+        cluster = 'ReactApp-Cluster'
+        service = 'reactappsvc'
     }
 
     stages {
